@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Goldcat 匠人星時代 — 五官微整高訂術</title>
+<title>GOLDCAT 匠人星時代 — 五官微整高訂術</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -114,7 +114,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:26px 60px;display:fl
 .module-lbl{font-family:'Montserrat',sans-serif;font-weight:400;font-size:11px;letter-spacing:.42em;color:var(--gold);text-transform:uppercase;margin-bottom:22px;display:flex;align-items:center;gap:14px;}
 .module-lbl::before{content:'';width:18px;height:1px;background:var(--gold);}
 .module-title{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(26px,2.4vw,36px);line-height:1.25;color:var(--black);margin-bottom:28px;letter-spacing:-.01em;}
-.module-sub{font-family: 'Montserrat', sans-serif;font-weight: 600;font-size: 25px; line-height: 1.6;color: #c5a059; letter-spacing: .04em;font-style: normal;margin-bottom: 22px;border-left: 2px solid rgba(201,169,110,.4);padding-left: 14px;}
+.module-sub{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;         /* 建議調粗一點，更有專業質感 */
+    font-size: 20px;          /* 調大到 20px，就會比下排的 15px 大 */
+    line-height: 1.6;
+    color: #c5a059;           /* 換成質感金棕色，或是您喜歡的顏色 */
+    letter-spacing: .04em;
+    font-style: normal;       /* 建議取消斜體 (italic)，看起來更俐落 */
+    margin-bottom: 22px;
+    border-left: 2px solid rgba(201,169,110,.4);
+    padding-left: 14px;
+}
 .module-pts li{font-family:'Montserrat',sans-serif;font-weight:400;font-size:15px;line-height:1.85;color:#444;letter-spacing:.02em;padding-left:22px;position:relative;}
 .module-pts li::before{content:'';position:absolute;left:0;top:10px;width:10px;height:1px;background:var(--gold);}
 
@@ -129,7 +140,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:26px 60px;display:fl
 .ment-cards{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
 .ment-card{background:#fff;border:1px solid rgba(201,169,110,.2);padding:56px 52px;text-align:left;position:relative;overflow:hidden;}
 .ment-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,transparent,var(--gold),transparent);}
-.ment-card-icon{font-family:'Montserrat',sans-serif;font-size:18px;letter-spacing:.18em;color:var(--gold);margin-bottom:24px;font-weight:600;}
+.ment-card-iconfont-family: 'Montserrat', sans-serif;
+    font-size: 16px;           /* 建議增加到 16px 或 17px，使其與下方內文相當或略大 */
+    font-weight: 600;          /* 加粗字體，增加權威感 */
+    color: #c5a059;            /* 使用您的品牌金棕色 */
+    letter-spacing: 0.1em;     /* 增加字距，讓精品感更強烈 */
+    margin-bottom: 12px;       /* 增加與下方大標題的間距 */
+    text-transform: uppercase; /* 如果有英文會自動變大寫，增加設計感 */
+    display: flex;
+    align-items: center;
+}
 .ment-card-title{font-family:'Cormorant Garamond',serif;font-weight:400;font-size:24px;line-height:1.3;color:var(--black);margin-bottom:20px;letter-spacing:-.01em;}
 .ment-card-body{font-family:'Montserrat',sans-serif;font-weight:400;font-size:15px;line-height:1.9;color:#444;letter-spacing:.02em;}
 
@@ -152,7 +172,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:26px 60px;display:fl
 
 /* BOOKING */
 #booking{background:var(--deep-gray);padding:140px 60px;position:relative;overflow:hidden;}
-#booking::before{content:'Goldcat';position:absolute;font-family:'Cormorant Garamond',serif;font-size:28vw;font-weight:300;color:rgba(255,255,255,.015);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;letter-spacing:.1em;white-space:nowrap;}
+#booking::before{content:'GOLDCAT';position:absolute;font-family:'Cormorant Garamond',serif;font-size:28vw;font-weight:300;color:rgba(255,255,255,.015);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;letter-spacing:.1em;white-space:nowrap;}
 .bk-header{text-align:center;margin-bottom:80px;position:relative;z-index:1;}
 .bk-eyebrow{font-family:'Montserrat',sans-serif;font-weight:400;font-size:11px;letter-spacing:.55em;color:var(--gold);text-transform:uppercase;margin-bottom:28px;}
 .bk-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,5vw,70px);line-height:1.1;color:#fff;letter-spacing:-.02em;}
@@ -206,6 +226,40 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   .module-body{padding:52px 28px;}
   footer{flex-direction:column;gap:24px;text-align:center;padding:56px 24px;}
 }
+
+/* ── 社交媒體浮動按鈕 ── */
+.social-float {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 9999;
+}
+.social-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+}
+.social-btn:hover {
+  transform: scale(1.18);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.45);
+}
+.social-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.social-btn.facebook { background: #1877f2; }
+.social-btn.line     { background: #06c755; }
 </style>
 </head>
 <body>
@@ -216,7 +270,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
 <!-- NAV -->
 <nav>
   <div>
-    <div class="nav-logo">Goldcat</div>
+    <div class="nav-logo">GOLDCAT</div>
     <div class="nav-sub">匠人星時代</div>
   </div>
   <div class="nav-right">2026 · Haute Couture Series</div>
@@ -228,7 +282,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   <div class="hero-content">
     <div class="hero-eyebrow">Haute Couture Series · 2026</div>
     <h1 class="hero-title">五官微整<br><em>高訂術</em><br>新手前導班</h1>
-    <p class="hero-sub">GoldCAT 匠人星時代 · 頂尖紋繡美業</p>
+    <p class="hero-sub">GOLDCAT 匠人星時代 · 頂尖紋繡美業</p>
     <div class="hero-cta">
       <a href="#booking" class="btn-primary enroll-trigger">
         <span>立即報名</span>
@@ -284,7 +338,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
     </div>
     <div class="master-divider"></div>
     <p class="master-bio">
-      擁有 <strong>20 年深厚美學底蘊</strong>。因為走過市場的彎路，痛恨坊間缺乏系統化的死板教學，Lili 老師決定親手制定最高標準。她不僅創立「匠人星時代」，更砸下重本研發自己<strong>儀器與色乳</strong>——因為「掌握源頭，才能真正定義何謂通透與不變色」。她首創結合「面相學」與「骨骼分析」的五官微整高訂術，這不僅是一門超越傳統紋繡的裸妝工藝，更是一套能讓你<strong>畢業即能高價接客的商業藍圖</strong>。
+      擁有 <strong>20 年深厚美學底蘊</strong>，從頂級新秘跨足建立自己的紋繡帝國。因為走過市場的彎路，痛恨坊間缺乏系統化的死板教學，Lili 老師決定親手制定最高標準。她不僅創立「匠人星時代」，更砸下重本建立專屬的<strong>色彩與設備實驗室</strong>——因為「掌握源頭，才能真正定義何謂通透與不變色」。她首創結合「面相學」與「骨骼分析」的五官微整高訂術，這不僅是一門超越傳統紋繡的裸妝工藝，更是一套能讓你<strong>畢業即能高價接客的商業變現藍圖</strong>。
     </p>
     <p class="master-punchline">「我不只教你手藝，我要教你如何成為高收入的美業主理人。」</p>
   </div>
@@ -302,8 +356,8 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   
     <div class="module-body">
       <div class="module-lbl">Module One</div>
-<h3 class="module-title">為什麼你的眉毛總是被嫌「死板」？<br>　　因為你只學了上色，沒學骨相。<br></h3>
-      <h4 class="module-sub">你需要：底層邏輯與五官微整思維</h4>
+      <h3 class="module-title">為什麼你的眉毛總是被嫌「死板」？<br>因為你只學了上色，沒學會分辨骨相。</h3>
+      <p class="module-sub">你需要：底層邏輯與五官為整思維。</p>
       <ul class="module-pts">
         <li><strong>獨創「三庭五眼」定位法：</strong>拋棄公版眉型，精準判讀顧客骨骼高低差，一秒解決臉部不對稱。</li>
         <li><strong>面相學融合工藝：</strong>不只做美觀，更做運勢。讓你的設計具備「玄學加持」的高客單價值。</li>
@@ -317,7 +371,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   
     <div class="module-body">
       <div class="module-lbl">Module Two</div>
-      <h3 class="module-title">害怕皮損流血？<br>做不出社交距離看不出的「媽生感」？</h3>
+      <h3 class="module-title">害怕皮損流血？<br>想做出天然「媽生感」<br></h3>
       <p class="module-sub">快來學：男士顆粒線與野生眉核心技術</p>
       <ul class="module-pts">
         <li><strong>零結痂高訂工法：</strong>破解下針深度與力度的迷思，實現當天即可碰水、無尷尬期的極致裸妝感。</li>
@@ -332,8 +386,8 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   
     <div class="module-body">
       <div class="module-lbl">Module Three</div>
-      <h3 class="module-title">怕把客人做成死板香腸嘴？<br>最後變成可怕紫黑唇？高訂透感霧唇<br></h3>
-      <p class="module-sub">用這招：高訂透感霧唇結合專業色彩美學</p>
+      <h3 class="module-title">怕把客人做成死板香腸嘴？<br>最後變成可怕紫黑純？<br></h3>
+      <p class="module-sub">用這招：高訂透感霧唇技術結合專業色彩美學。</p>
       <ul class="module-pts">
         <li><strong>極致透感的落針工法：</strong>跳脫傳統死板的唇框線，打造如水光唇膏般、無尷尬期的媽生紅潤唇。</li>
         <li><strong>色彩學與改烏唇秘笈：</strong>破解不同膚色與原生唇底色的化學反應，精準調配出專屬客人的高級色乳。</li>
@@ -347,8 +401,8 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   
     <div class="module-body">
       <div class="module-lbl">Module Four</div>
-      <h3 class="module-title">上完課就像變孤兒？<br>遇到問題沒人問，技術永遠停在結業那天？<br></h3>
-      <p class="module-sub">學院專屬：數位學習履歷與一年複訓機制</p>
+      <h3 class="module-title">上完課就像變孤兒？<br>遇到問題沒任汶，技術停在結業那天？<br></h3>
+      <p class="module-sub">學院專屬：數位學習履歷與一年複訓機制。</p>
       <ul class="module-pts">
         <li><strong>尊榮學員專屬系統：</strong>建立你的數位學習履歷，清楚記錄技能成就，讓學習進度可視化。</li>
         <li><strong>完善課後社群支援：</strong>實操遇到瓶頸隨時有靠山，提供大師線上點評，持續精進不孤軍奮戰。</li>
@@ -388,13 +442,13 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
 <section id="urgency">
   <div class="urg-title reveal">改變，從現在開始。</div>
   <p class="urg-body reveal d1">
-    當別人用一個週末的下午在家無意義地消磨，<br>你已經拿到了跨入高收美業的入場券。<br><br>
-    在這場實戰說明會中，<br><strong>Lili 教母將親自上陣，<br><br>讓你第一線零距離觀摩「獨家野生眉」的高訂工法。</strong><br>這不是看影片，而是感受真實的落針與肌理變化。
+    當別人在週末午後在家無意義地消磨，<br>你已經拿到了跨入高收美業的入場券。<br><br>
+    在這場實戰說明會中，<br><strong>眉唇教母--LiLi老師將親自上陣，<br><br>讓你第一線零距離觀摩「獨家野生眉」的高訂工法。</strong><br>這不是看影片！<br> 而是感受真實的落針與肌理變化。
   </p>
   <div class="urg-price reveal d2">
     <span class="urg-orig">官方原價 NT$ 6,600</span><br>
     <span class="urg-new">限時專案價 NT$ 660</span>
-    <p class="urg-limit">⚠️ &nbsp;台北／新竹場次，各限額 15 名&nbsp; ⚠️</p>
+    <p class="urg-limit">⚠️ &nbsp;名額有限　台北／新竹場次，各限 15 名&nbsp; ⚠️</p>
   </div>
   <div id="countdown" class="reveal d3">
     <div class="cd-box"><span id="days" class="cd-num">05</span><span class="cd-label">Days</span></div>
@@ -408,7 +462,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
 <section id="booking">
   <div class="bk-header reveal">
     <div class="bk-eyebrow">Session · 場次報名</div>
-    <h2 class="bk-title">開啟你的<br><em>大師之路</em></h2>
+    <h2 class="bk-title">預約你的<br><em>高訂席位</em></h2>
   </div>
   <div class="sessions">
     <div class="s-card reveal">
@@ -416,7 +470,7 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
       <div class="s-name">新竹場</div>
       <div class="s-rows">
         <div><div class="s-row-lbl">Date · 日期</div><div class="s-row-val">2026 年 04 月 11日 (六) · 時間 TBA</div></div>
-        <div><div class="s-row-lbl">Venue · 地點</div><div class="s-row-val">新竹市東區東門街96號六樓之一<br></div></div>
+        <div><div class="s-row-lbl">Venue · 地點</div><div class="s-row-val">新竹市東區東門街96號6樓之一<br><small></small></div></div>
         <div><div class="s-row-lbl">Capacity · 名額</div><div class="s-row-val">限額 15 席 · 小班私授</div></div>
       </div>
       <div class="s-divider"></div>
@@ -426,8 +480,8 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
       <div class="s-city">Taipei</div>
       <div class="s-name">台北場</div>
       <div class="s-rows">
-        <div><div class="s-row-lbl">Date · 日期</div><div class="s-row-val">2026 年 04 月 26日 (日) · 時間 TBA</div></div>
-        <div><div class="s-row-lbl">Venue · 地點</div><div class="s-row-val">台北市信義區和平東路三段163號三樓<br></div></div>
+        <div><div class="s-row-lbl">Date · 日期</div><div class="s-row-val">2026 年 04 月 26 日 (日) · 時間 TBA</div></div>
+        <div><div class="s-row-lbl">Venue · 地點</div><div class="s-row-val">台北市信義區和平東路三段163號三樓<br><small></small></div></div>
         <div><div class="s-row-lbl">Capacity · 名額</div><div class="s-row-val">限額 15 席 · 小班私授</div></div>
       </div>
       <div class="s-divider"></div>
@@ -436,20 +490,20 @@ footer{background:var(--black);padding:72px 60px;display:flex;justify-content:sp
   </div>
   <div class="bk-cta reveal">
     <a href="#" id="enrollBtn" class="btn-gold">
-      <span>現在就報名課程</span>
+      <span>預約高訂席位</span>
       <span class="btn-arrow" style="color:inherit;"></span>
     </a>
-    <p class="bk-note">名額有限，加LINE才能收到確認報名通知唷 · </p>
+    <p class="bk-note">名額有限，加LINE才能收到確認報名通知唷</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
   <div>
-    <div class="ft-logo">GoldCAT 匠人星時代</div>
-    <div class="ft-sub">GoldCAT 匠人星時代 · 2026</div>
+    <div class="ft-logo">GOLDCAT 匠人星時代</div>
+    <div class="ft-sub">Haute Couture Beauty Academy · 2026</div>
   </div>
-  <div class="ft-copy">© 2026 GoldCAT 匠人星時代 · All Rights Reserved</div>
+  <div class="ft-copy">© 2026 GOLDCAT 匠人星時代 · All Rights Reserved</div>
 </footer>
 
 <!-- ══ LINE POPUP ══ -->
