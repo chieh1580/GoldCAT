@@ -894,123 +894,202 @@ function handleMenu(key) {
    AI Smart Reply System
 ══════════════════════════════════════ */
 
-// Conversation history for multi-turn context
-const aiHistory = [];
-
-// Mode selector buttons
-let currentMode = null; // null = auto-detect, 'followup' = post-service, 'course' = course inquiry
-
-const AI_SYSTEM_PROMPT = `你是「YS 療癒美學（YS.spa）」的專屬 LINE 客服 AI 助理，名字叫做「YS 小幫手」。
-
-【品牌資訊】
-- 品牌：YS 療癒美學 YS.spa
-- 主理人：淇淇老師
-- 地址：桃園市桃園區國豐三街 76 號
-- 營業時間：10:00–22:00
-- LINE：@y.s1314
-- 預約系統：https://www.ezpretty.com.tw/ezpretty/gate#/storeInfo/0a52bfbf0bc096380357021c6f57cd4c
-- 服務項目：撥筋療癒、能量撥筋、臉部撥經、腹部暖宮撥筋、產後修復、溫和整復、傳統整復
-- 課程：能量胸腹筋動舒壓課程（兩天制，需自備模特兒）、撥筋教學課程、產後修復課程
-
-【服務價目】
-療癒撥經套餐：
-- 背影殺手 F 套餐（背部撥經）：原價 2,300 / 體驗價 1,800 / 90mins，含頭部、肩頸、手部、背部、腰部、臀部
-- 漫畫腿 G 套餐（腿部撥經）：原價 2,300 / 體驗價 1,800 / 90mins，含足底、小腿、大腿、臀部
-- 身型調整 H 套餐（整復與撥經）：原價 4,400 / 體驗價 3,500 / 150mins，全身放鬆整復
-
-傳統整復：
-- 單部位整復：400 / 半身鬆經：700 / 半身整復：1,000 / 半身鬆經整復：1,300
-- 全身鬆經：1,500 / 全身整復：1,600 / 全身鬆經整復：2,600
-
-本月三月活動：
-- 內外開運組合（臉部＋腹部）：$3,980，加碼贈暖腹熱敷、頭部放鬆、精油舒壓
-- 開運臉部撥經：$2,888，加碼贈頭部放鬆、眼周舒壓
-- 腹部撥經調理：$1,280，加碼贈暖腹熱敷
-
-課程資訊（能量胸腹筋動舒壓）：
-- 兩天制小班課程（第一天：胸部撥筋；第二天：腹部暖宮撥筋）
-- 含美胸撥筋、腹部暖宮撥筋的理論、手技操作、症狀處理、術科考試
-- 完成可獲得「經絡撥筋師」證書
-- 課程需自備模特兒
-- 報名請加 LINE @y.s1314 或直接詢問淇淇老師
-
-【你的回覆風格】
-- 用繁體中文回覆
-- 語氣溫柔、親切、有溫度，像朋友一樣
-- 適時加入 emoji 增添溫暖感
-- 回覆要具體實用，不要太長（最多 150 字）
-- 不確定的事情要引導客人聯繫 LINE @y.s1314
-
-【兩種主要服務情境】
-
-情境一「服務後關心」：
-客人做完服務後 1-3 天傳訊息，可能反映：
-- 身體有酸痛、反應、排毒反應（正常現象需說明）
-- 回饋療效（要鼓勵並建議下次療程）
-- 詢問注意事項（給予飲食、作息建議）
-回覆要：溫暖關心 → 解釋原因 → 給予具體建議 → 適時建議下次預約
-
-情境二「課程諮詢」：
-潛在學員詢問課程，可能問：
-- 課程內容、費用、時間
-- 撥筋是什麼、原理
-- 學完可以做什麼、就業前景
-- 如何報名
-回覆要：熱情歡迎 → 解答疑問 → 引導加 LINE 進一步諮詢
-
-請根據對話內容自然判斷情境，給出最適合的回覆。`;
-
-async function getAIReply(userMessage, contextHint = '') {
-  // Add user message to history (prepend hint if any)
-  const msgContent = contextHint ? contextHint + '\n\n使用者說：' + userMessage : userMessage;
-  aiHistory.push({ role: 'user', content: msgContent });
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: AI_SYSTEM_PROMPT,
-        messages: aiHistory
-      })
-    });
-
-    const data = await response.json();
-    const replyText = data.content?.[0]?.text || '感謝您的訊息，我們將盡快回覆您 🌿';
-
-    // Add assistant reply to history (keep last 10 turns to avoid token overflow)
-    aiHistory.push({ role: 'assistant', content: replyText });
-    if (aiHistory.length > 20) aiHistory.splice(0, 2);
-
-    // Convert newlines to <br> for HTML display
-    return replyText.replace(/\n/g, '<br>');
-
-  } catch (err) {
-    console.error('AI reply error:', err);
-    return '感謝您的訊息 🌿<br>目前系統忙碌中，請稍後再試，或加 LINE @y.s1314 直接聯繫我們！';
-  }
-}
-
 /* ══════════════════════════════════════
-   課程關鍵字偵測
+   本地腳本式智慧回覆系統（離線版）
 ══════════════════════════════════════ */
-const COURSE_KEYWORDS = [
-  '課程','上課','學','報名','學費','費用','證照','撥筋師','怎麼學','可以學','想學',
-  '招生','開課','教學','幾天','時間','多少錢','怎麼報','如何報','有教嗎','有課嗎',
-  '能量胸腹','胸腹課','撥筋教學','產後課','整復課'
+
+// ── 課程關鍵字 ──
+const COURSE_KW = ['課程','上課','學費','費用','報名','證照','撥筋師','怎麼學','想學',
+  '招生','開課','教學','幾天','多少錢','怎麼報','如何報','有教嗎','有課嗎',
+  '能量胸腹','胸腹課','撥筋教學','產後課','整復課','可以學'];
+
+// ── 服務後關心：身體反應關鍵字對應回覆 ──
+const FOLLOWUP_RULES = [
+  {
+    kw: ['痛','酸','酸痛','好痛','很痛','痠痛','不舒服','會痛'],
+    replies: [
+      '這是很正常的排毒反應喔 🌿 撥筋後筋膜被鬆開，身體開始代謝累積的廢物，通常 1-2 天就會緩解。',
+      '建議您這兩天多補充溫水，幫助身體加速代謝 💧 避免冰冷食物，讓氣血循環更順暢喔！',
+      '如果痠痛感比較強烈，可以在患處輕輕熱敷 15-20 分鐘，會舒服很多 🌡️ 有任何疑問歡迎隨時告訴我！'
+    ]
+  },
+  {
+    kw: ['腫','水腫','腫脹','脹脹','浮腫'],
+    replies: [
+      '撥筋後短暫的輕微腫脹感是正常現象 🌿 這是因為淋巴循環被啟動，身體正在排除多餘水分。',
+      '建議這兩天抬高腿部休息，並避免久站久坐 🦵 同時多喝溫水，大約 1-2 天就會改善喔！',
+      '如果腫脹感超過 3 天仍沒有減緩，歡迎加 LINE @y.s1314 讓淇淇老師為您進一步評估 💬'
+    ]
+  },
+  {
+    kw: ['好多了','改善','舒服','輕鬆','很好','很棒','效果','有效','喜歡','不錯'],
+    replies: [
+      '太好了！聽到您身體有改善真的很開心 🎉 這表示撥筋的效果正在持續發揮作用喔！',
+      '撥筋的療效通常需要 3-5 次才能達到最佳狀態，建議您固定每 2-3 週做一次保養 🌸',
+      '下次可以考慮搭配不同部位的療程，讓整體調理更全面 ✨ 隨時歡迎預約您的下一次療癒時光！'
+    ]
+  },
+  {
+    kw: ['沒感覺','沒什麼感覺','差不多','普通','還好'],
+    replies: [
+      '沒關係喔！每個人的身體反應都不太一樣，有些人在第 2-3 次療程後才會感受到明顯變化 🌿',
+      '建議您這幾天多觀察身體的細微變化，例如睡眠品質、肩頸靈活度、消化狀況等 💭',
+      '如果您有任何疑問，或想調整下次的療程方向，歡迎隨時加 LINE @y.s1314 跟淇淇老師聊聊 😊'
+    ]
+  },
+  {
+    kw: ['睡眠','睡不好','睡很好','入睡','失眠','睡覺'],
+    replies: [
+      '撥筋對改善睡眠品質很有幫助喔！神經系統放鬆後，入睡會更容易 😴',
+      '如果您之前有睡眠困擾，建議可以搭配頭部撥筋舒壓療程，效果更好 🌙',
+      '持續做療程通常在 2-3 次後睡眠改善會更明顯 ✨ 有需要可以預約下次試試看！'
+    ]
+  },
+  {
+    kw: ['下次','再來','預約','什麼時候','多久','間隔'],
+    replies: [
+      '建議每 2-3 週做一次保養型療程效果最好 🌿 如果身體比較緊繃，可以縮短為每週一次。',
+      '您可以直接點下方「線上預約」選擇喜歡的時段，或加 LINE @y.s1314 讓我們幫您安排 📅',
+      '三月份有限定優惠活動喔！點下方選單的「本月活動」查看最新方案 🎉'
+    ]
+  },
+  {
+    kw: ['謝謝','感謝','感謝你','辛苦','老師好','淇淇'],
+    replies: [
+      '謝謝您的信任 🥰 這是我們最大的動力！',
+      '淇淇老師很開心能幫助到您 🌸 有任何需要隨時歡迎找我們喔！',
+      '能夠讓您感受到療癒的效果，是 YS 最開心的事 ✨ 期待下次再為您服務！'
+    ]
+  }
 ];
 
-function isCourseInquiry(text) {
-  return COURSE_KEYWORDS.some(kw => text.includes(kw));
+// ── 課程諮詢：關鍵字對應回覆 ──
+const COURSE_RULES = [
+  {
+    kw: ['費用','學費','多少錢','價格','價錢','收費'],
+    replies: [
+      '我們的課程費用請直接加 LINE @y.s1314 詢問淇淇老師，她會根據您的需求提供最適合的方案 💬',
+      '目前有不定期的早鳥優惠，建議盡早加 LINE @y.s1314 確認最新價格喔！🌸'
+    ]
+  },
+  {
+    kw: ['幾天','幾小時','時間','上課時間','課程時間','多久'],
+    replies: [
+      '能量胸腹筋動舒壓課程是 2 天制小班課程 📅<br>第一天：胸部撥筋（10:00-17:00）<br>第二天：腹部暖宮撥筋（10:00-17:00）',
+      '上課時間兩天都是 10:00 到 17:00，含理論課和手技實操練習 🌿 確切開課日期請加 LINE @y.s1314 詢問！'
+    ]
+  },
+  {
+    kw: ['內容','學什麼','課程內容','教什麼','包含'],
+    replies: [
+      '課程內容非常豐富喔！包含：<br>✦ 美胸/腹部撥筋基礎理論<br>✦ 14 經絡與 12 筋經知識<br>✦ 手技操作與工具使用<br>✦ 症狀處理與示範<br>✦ 術科考試＋頒發證書 🎓',
+      '兩天課程兼顧理論與實操，學完就能獨立執業 💪 還需要自備一位模特兒一起上課喔！'
+    ]
+  },
+  {
+    kw: ['證照','證書','資格','認證'],
+    replies: [
+      '完成課程並通過術科考試後，可獲得「經絡撥筋師」專業證書 🎓 這在業界是有公信力的認證喔！',
+      '有了這張證書，不管是自行接客、開班教學，還是到相關工作室任職都更有競爭力 ✨'
+    ]
+  },
+  {
+    kw: ['報名','怎麼報','如何報','怎麼加入','想報名','要怎麼'],
+    replies: [
+      '報名方式很簡單，直接加 LINE @y.s1314 跟淇淇老師說「我想報名課程」就可以囉 😊',
+      '加入後老師會跟您說明開課日期、名額狀況和詳細流程，小班制名額有限，建議盡早登記！🌸'
+    ]
+  },
+  {
+    kw: ['學完','畢業後','出路','可以做什麼','就業','創業','開業','接客'],
+    replies: [
+      '學完之後選擇很多喔！可以：<br>✦ 自己接客做個人工作室<br>✦ 進入美容/療癒相關店家任職<br>✦ 開班教學傳授技術<br>✦ 幫家人朋友做保健 🌿',
+      '撥筋產業在台灣越來越熱門，現在入行時機很好 💪 有興趣的話歡迎加 LINE @y.s1314 深入了解！'
+    ]
+  },
+  {
+    kw: ['適合','初學','零基礎','沒基礎','新手','初學者','沒學過'],
+    replies: [
+      '完全沒問題！我們的課程從基礎開始教起，不需要任何美容或醫療背景 🌱',
+      '淇淇老師教學非常有耐心，小班制讓每位學員都能充分練習，零基礎也能學會 💪'
+    ]
+  },
+  {
+    kw: ['撥筋是什麼','什麼是撥筋','原理','怎麼運作','效果'],
+    replies: [
+      '撥筋是結合中醫經絡原理的深層療癒技術 🌿<br>透過特定手法和工具疏通筋膜、活絡氣血，改善身體各種痠痛和循環問題。',
+      '與一般按摩不同，撥筋針對「筋結」和「沾黏」進行精準處理，效果更持久、更深層 ✨<br>有興趣想了解更多，歡迎加 LINE @y.s1314 詢問！'
+    ]
+  }
+];
+
+// ── 通用備用回覆 ──
+const FALLBACK_REPLIES = [
+  '感謝您的訊息 🌿 這個問題讓我幫您轉達給淇淇老師，請加 LINE @y.s1314 會有更詳細的說明喔！',
+  '謝謝您聯繫 YS 療癒美學 🌸 如果需要進一步諮詢，歡迎直接加 LINE @y.s1314，老師會親自為您解答！',
+  '您好！有任何療程或課程相關問題，都歡迎加 LINE @y.s1314 聯繫我們 💬 或使用下方選單快速查詢資訊喔！'
+];
+
+// 當前對話狀態
+let replyState = { mode: 'general', ruleIndex: -1, replyStep: 0 };
+
+function matchRules(text, rules) {
+  for (let i = 0; i < rules.length; i++) {
+    if (rules[i].kw.some(k => text.includes(k))) return i;
+  }
+  return -1;
 }
+
+function getLocalReply(text) {
+  const isCourse = COURSE_KW.some(k => text.includes(k));
+
+  if (isCourse) {
+    const idx = matchRules(text, COURSE_RULES);
+    if (idx >= 0) {
+      const rule = COURSE_RULES[idx];
+      // cycle through replies
+      if (replyState.mode === 'course' && replyState.ruleIndex === idx) {
+        replyState.replyStep = (replyState.replyStep + 1) % rule.replies.length;
+      } else {
+        replyState = { mode: 'course', ruleIndex: idx, replyStep: 0 };
+      }
+      return rule.replies[replyState.replyStep];
+    }
+    // Generic course reply
+    return '感謝您對課程的興趣 🌸 我們的撥筋課程小班制、從零開始教，學完即可執業！<br>詳細資訊請加 LINE @y.s1314 讓淇淇老師為您介紹喔 😊';
+  }
+
+  // Followup mode (after triggerFollowUpMessage)
+  if (replyState.mode === 'followup') {
+    const idx = matchRules(text, FOLLOWUP_RULES);
+    if (idx >= 0) {
+      const rule = FOLLOWUP_RULES[idx];
+      if (replyState.ruleIndex === idx) {
+        replyState.replyStep = (replyState.replyStep + 1) % rule.replies.length;
+      } else {
+        replyState.ruleIndex = idx;
+        replyState.replyStep = 0;
+      }
+      return rule.replies[replyState.replyStep];
+    }
+    return FOLLOWUP_REPLIES[Math.floor(Math.random() * FOLLOWUP_REPLIES.length)];
+  }
+
+  // General fallback
+  return FALLBACK_REPLIES[Math.floor(Math.random() * FALLBACK_REPLIES.length)];
+}
+
+const FOLLOWUP_REPLIES = [
+  '謝謝您的回覆 🌿 聽到這樣很放心！如果有任何不適或疑問，隨時告訴我喔。',
+  '了解！每個人的身體反應都不太一樣，有任何變化都歡迎跟我分享 💬',
+  '感謝您的回饋 🌸 如果需要進一步建議，歡迎加 LINE @y.s1314 讓淇淇老師為您評估！'
+];
 
 /* ══════════════════════════════════════
    服務後自動關心推播（模擬 3 天後）
 ══════════════════════════════════════ */
 function triggerFollowUpMessage() {
-  // 日期分隔線：模擬 3 天後
+  replyState.mode = 'followup';
   const sep = document.createElement('div');
   sep.className = 'date-sep';
   sep.innerHTML = '<span>3 天後</span>';
@@ -1025,20 +1104,15 @@ function triggerFollowUpMessage() {
       setTimeout(() => {
         removeTyping();
         addBotMsg('有時候做完撥筋後，身體會有一些排毒反應，這都是正常的喔 ✨<br><br>請問您這幾天身體感覺怎麼樣呢？<br>有哪裡不舒服或是有疑問都可以直接告訴我 💬');
-        // inject context into AI history so it knows we're in followup mode
-        aiHistory.push({
-          role: 'assistant',
-          content: '嗨！您好 🌿 距離上次來 YS 做療程已經 3 天了，想關心一下您身體的狀況如何？有時候做完撥筋後，身體會有一些排毒反應，這都是正常的喔 ✨ 請問您這幾天身體感覺怎麼樣呢？有哪裡不舒服或是有疑問都可以直接告訴我 💬'
-        });
       }, 1100);
     }, 800);
   }, 1200);
 }
 
 /* ══════════════════════════════════════
-   主送出函式（AI 驅動 + 關鍵字偵測）
+   主送出函式（本地腳本式）
 ══════════════════════════════════════ */
-async function sendText() {
+function sendText() {
   const inp = document.getElementById('textInput');
   const val = inp.value.trim();
   if (!val) return;
@@ -1046,23 +1120,14 @@ async function sendText() {
   addUserMsg(val);
   inp.value = '';
 
-  inp.disabled = true;
-  inp.placeholder = 'YS 小幫手回覆中...';
+  // 自然打字延遲感
+  const delay = 700 + Math.random() * 600;
   showTyping();
-
-  // 若偵測到課程關鍵字，在 system context 中加入提示
-  let contextHint = '';
-  if (isCourseInquiry(val)) {
-    contextHint = '【系統提示：使用者正在詢問課程相關問題，請以「課程諮詢」情境回覆，熱情介紹課程內容並引導加 LINE 報名】';
-  }
-
-  const reply = await getAIReply(val, contextHint);
-  removeTyping();
-  addBotMsg(reply);
-
-  inp.disabled = false;
-  inp.placeholder = '輸入訊息…';
-  inp.focus();
+  setTimeout(() => {
+    removeTyping();
+    const reply = getLocalReply(val);
+    addBotMsg(reply);
+  }, delay);
 }
 
 document.getElementById('textInput').addEventListener('keydown', e => {
