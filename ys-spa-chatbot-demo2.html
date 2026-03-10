@@ -1041,13 +1041,12 @@ function matchRules(text, rules) {
 }
 
 function getLocalReply(text) {
+  // 1. 課程關鍵字優先
   const isCourse = COURSE_KW.some(k => text.includes(k));
-
   if (isCourse) {
     const idx = matchRules(text, COURSE_RULES);
     if (idx >= 0) {
       const rule = COURSE_RULES[idx];
-      // cycle through replies
       if (replyState.mode === 'course' && replyState.ruleIndex === idx) {
         replyState.replyStep = (replyState.replyStep + 1) % rule.replies.length;
       } else {
@@ -1055,28 +1054,32 @@ function getLocalReply(text) {
       }
       return rule.replies[replyState.replyStep];
     }
-    // Generic course reply
     return '感謝您對課程的興趣 🌸 我們的撥筋課程小班制、從零開始教，學完即可執業！<br>詳細資訊請加 LINE @y.s1314 讓淇淇老師為您介紹喔 😊';
   }
 
-  // Followup mode (after triggerFollowUpMessage)
-  if (replyState.mode === 'followup') {
-    const idx = matchRules(text, FOLLOWUP_RULES);
-    if (idx >= 0) {
-      const rule = FOLLOWUP_RULES[idx];
-      if (replyState.ruleIndex === idx) {
-        replyState.replyStep = (replyState.replyStep + 1) % rule.replies.length;
-      } else {
-        replyState.ruleIndex = idx;
-        replyState.replyStep = 0;
-      }
-      return rule.replies[replyState.replyStep];
+  // 2. 服務後身體反應關鍵字 — 不管 mode 是什麼，只要命中就回
+  const followupIdx = matchRules(text, FOLLOWUP_RULES);
+  if (followupIdx >= 0) {
+    const rule = FOLLOWUP_RULES[followupIdx];
+    if (replyState.ruleIndex === followupIdx) {
+      replyState.replyStep = (replyState.replyStep + 1) % rule.replies.length;
+    } else {
+      replyState.ruleIndex = followupIdx;
+      replyState.replyStep = 0;
     }
-    return FOLLOWUP_REPLIES[Math.floor(Math.random() * FOLLOWUP_REPLIES.length)];
+    replyState.mode = 'followup';
+    return rule.replies[replyState.replyStep];
   }
 
-  // General fallback
-  return FALLBACK_REPLIES[Math.floor(Math.random() * FALLBACK_REPLIES.length)];
+  // 3. 若已在 followup 對話中，給通用關心回覆
+  if (replyState.mode === 'followup') {
+    const r = FOLLOWUP_REPLIES;
+    return r[Math.floor(Math.random() * r.length)];
+  }
+
+  // 4. 最終 fallback
+  const r = FALLBACK_REPLIES;
+  return r[Math.floor(Math.random() * r.length)];
 }
 
 const FOLLOWUP_REPLIES = [
@@ -1154,10 +1157,10 @@ window.addEventListener('load', () => {
   }, 2600);
 
   // ── Demo: 模擬「3天後」服務後關心訊息自動推播 ──
-  // 實際部署時改為排程 API 觸發；此處用 30 秒延遲示意
+  // 實際部署時改為排程 API 觸發；此處用 8 秒延遲示意
   setTimeout(() => {
     triggerFollowUpMessage();
-  }, 30000);
+  }, 8000);
 });
 </script>
 </body>
